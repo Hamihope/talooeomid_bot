@@ -2,10 +2,11 @@ import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import os
 
-TOKEN = os.getenv("BOT_TOKEN", "8012107542:AAHr35D0rDqxW9PguqLBo_Y8pkFAjCo-m2U")
+TOKEN = os.getenv("BOT_TOKEN",import os
+TOKEN = os.getenv("BOT_TOKEN")
 bot = telebot.TeleBot(TOKEN)
 
-ADMIN_ID = 123456789  # اینجا عدد عددی آیدی عددی ادمین رو بذار
+ADMIN_ID = @tl_omidSP # اینجا عدد عددی آیدی عددی ادمین رو بذار
 
 MIN_PAYMENT = 200000  # حداقل مبلغ پرداخت
 ZARINPAL_LINK = "https://talooeomid.zarinp.al"
