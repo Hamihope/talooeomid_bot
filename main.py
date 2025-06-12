@@ -1,25 +1,21 @@
-import telebot
 import os
-from flask import Flask, request
+import telebot
 
+# دریافت توکن از متغیر محیطی
 TOKEN = os.getenv("BOT_TOKEN")
+
+if not TOKEN:
+    raise ValueError("توکن ربات پیدا نشد. لطفاً متغیر BOT_TOKEN را در تنظیمات Render وارد کن.")
+
 bot = telebot.TeleBot(TOKEN)
 
-app = Flask(__name__)
-
-@app.route('/', methods=['GET', 'POST'])
-def webhook():
-    if request.method == 'POST':
-        json_string = request.get_data().decode('utf-8')
-        update = telebot.types.Update.de_json(json_string)
-        bot.process_new_updates([update])
-        return '', 200
-    return 'ربات طلوع امید فعال است 💫'
-
-# یک پیام تست برای مطمئن شدن از راه‌اندازی
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, "🌅 به ربات طلوع امید خوش اومدی!")
+    bot.reply_to(message, "سلام! به ربات کمپین طلوع امید خوش اومدی ☀️")
 
-if __name__ == '__main__':
-    app.run()
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+    bot.reply_to(message, "پیام شما دریافت شد 🌟")
+
+print("ربات در حال اجراست...")
+bot.infinity_polling()
