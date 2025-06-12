@@ -1,22 +1,25 @@
 import telebot
+import os
+from flask import Flask, request
 
-# توکن ربات
-TOKEN = '8012107542:AAFuosyvKUE6q4Ht4jBf3VV2ezxNCMxbh8U'
+TOKEN = os.getenv("BOT_TOKEN")
 bot = telebot.TeleBot(TOKEN)
 
-# پیام خوش‌آمد
+app = Flask(__name__)
+
+@app.route('/', methods=['GET', 'POST'])
+def webhook():
+    if request.method == 'POST':
+        json_string = request.get_data().decode('utf-8')
+        update = telebot.types.Update.de_json(json_string)
+        bot.process_new_updates([update])
+        return '', 200
+    return 'ربات طلوع امید فعال است 💫'
+
+# یک پیام تست برای مطمئن شدن از راه‌اندازی
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(
-        message,
-        "🌅 سلام! به کمپین قرعه‌کشی «طلوع امید» خوش اومدی!\n\n"
-        "🎁 با پرداخت حداقل ۲۰۰ هزار تومان وارد قرعه‌کشی شو\n"
-        "🎉 جوایز مرحله اول: موبایل، پول نقد و سکه طلا (۲۰۰ میلیون تومان)\n\n"
-        "برای ثبت‌نام روی لینک زیر کلیک کن:\n"
-        "🔗 https://talooeomid-bot-2.onrender.com\n\n"
-        "پشتیبانی: @tl_omidSP\n"
-        "📞 تماس: 09357632421"
-    )
+    bot.reply_to(message, "🌅 به ربات طلوع امید خوش اومدی!")
 
-# اجرای دائمی ربات
-bot.infinity_polling()
+if __name__ == '__main__':
+    app.run()
